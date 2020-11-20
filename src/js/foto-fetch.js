@@ -2,14 +2,12 @@ import '../styles.scss';
 import ApiService from './apiService.js';
 import fotoSearchTpl from '../templates/foto-search.hbs';
 import LoadMoreBtn from '../js/load-more-btn';
+import getRefs from './get-refs';
+import { toScroll } from './smooth-scroll';
+
 import { openModal } from './open-modal';
 
-const refs = {
-  searchForm: document.querySelector('.js-search-form'),
-  hitsContainer: document.querySelector('.js-gallery-container'),
-  fotoContainer: document.querySelector('img.foto'),
-  //   loadMoreBtn: document.querySelector('[data-action="load-more"]'),
-};
+const refs = getRefs();
 
 const loadMoreBtn = new LoadMoreBtn({
   selector: '[data-action="load-more"]',
@@ -39,7 +37,7 @@ function onSearchImage(e) {
 }
 
 function fetchHits() {
-  let height = refs.hitsContainer.clientHeight;
+  const height = refs.hitsContainer.clientHeight;
 
   loadMoreBtn.disable();
   apiService.fetchHits().then(hits => {
@@ -55,14 +53,6 @@ function appendHitsMarkUp(hits) {
 
 function clearHitsContainer() {
   refs.hitsContainer.innerHTML = '';
-}
-
-///Smooth Scrolling/
-function toScroll(height) {
-  window.scrollTo({
-    top: height + refs.searchForm.clientHeight,
-    behavior: 'smooth',
-  });
 }
 
 export default { onSearchImage, fetchHits };
